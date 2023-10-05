@@ -8,7 +8,7 @@ namespace CommentedNews_Functions
     public class Scrape
     {
         [FunctionName("Scrape")]
-        public void Run([TimerTrigger("0 0/1 * * * *")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("0 0/15 * * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Scraping at: {DateTime.Now}");
         }

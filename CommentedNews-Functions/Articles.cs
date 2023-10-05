@@ -17,12 +17,10 @@ namespace CommentedNews_Functions
     public class Articles
     {
         private readonly ArticleContext _context;
-        private readonly IConfiguration _configuration;
 
-        public Articles(ArticleContext context, IConfiguration configuration)
+        public Articles(ArticleContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
         [FunctionName("GetArticles")]
