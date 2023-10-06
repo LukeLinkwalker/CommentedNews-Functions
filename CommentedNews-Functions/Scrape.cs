@@ -44,7 +44,7 @@ namespace CommentedNews_Functions
 
             foreach(Article article in articles)
             {
-                Article articleInDatabase = _context.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl, null);
+                Article articleInDatabase = _context.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
 
                 if(articleInDatabase == null)
                 {
