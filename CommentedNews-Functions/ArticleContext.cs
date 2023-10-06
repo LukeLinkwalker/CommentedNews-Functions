@@ -14,16 +14,17 @@ namespace CommentedNews_Functions
 
         }
 
-        public DbSet<Article> Articles { get; set; }
+        public DbSet<Article> Article { get; set; }
     }
 
     public class Article
     {
         public int Id { get; set; }
-        public string ArticleURL { get; set; }
+        public string ArticleUrl { get; set; }
         public string ArticleTitle { get; set; }
         public string ArticleThumbnail { get; set; }
-        public string ThreadURL { get; set; }
+        public string ThreadUrl { get; set; }
         public int ThreadComments { get; set; }
+        public DateTime ThreadTimestamp { get; set; }
     }
 }
