@@ -19,6 +19,9 @@ namespace CommentedNews_Functions
         {
             builder.Services.AddDbContext<ArticleContext>(
                 options => options.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString")));
+
+            builder.Services.AddDbContext<MediaContext>(
+                options => options.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString")));
         }
     }
 }

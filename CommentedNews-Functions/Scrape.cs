@@ -14,24 +14,17 @@ namespace CommentedNews_Functions
 {
     public class Scrape
     {
-        private readonly string[] medier = new string[] {
-            "tv2.dk",
-            "tv2kosmopol.dk",
-            "dr.dk",
-            "information.dk",
-            "altinget.dk",
-            "tjekdet.dk",
-            "zetland.dk",
-            "politiken.dk",
-            "ekstrabladet.dk",
-            "bt.dk"
-        };
+        private readonly ArticleContext _articleContext;
+        private readonly MediaContext _mediaContext;
+        private List<string> medier {  get; set; }
 
-        private readonly ArticleContext _context;
-
-        public Scrape(ArticleContext context)
+        public Scrape(ArticleContext articleContext, MediaContext mediaContext)
         {
-            _context = context;
+            _articleContext = articleContext;
+            _mediaContext = mediaContext;
+
+            var media = _mediaContext.Media.ToList<Media>();
+            medier = media.Select(m => m.Name).ToList();
         }
 
         [FunctionName("Scrape")]
@@ -45,11 +38,11 @@ namespace CommentedNews_Functions
 
             foreach(Article article in articles)
             {
-                Article articleInDatabase = _context.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
+                Article articleInDatabase = _articleContext.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
                 
                 if(articleInDatabase == null)
                 {
-                    _context.Article.Add(article);
+                    _articleContext.Article.Add(article);
                 }
                 else
                 {
@@ -57,7 +50,7 @@ namespace CommentedNews_Functions
                 }
             }
 
-            _context.SaveChanges();
+            _articleContext.SaveChanges();
         }
 
         private async Task<string> GetJSON(ILogger log)
