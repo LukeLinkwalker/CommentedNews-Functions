@@ -42,17 +42,23 @@ namespace CommentedNews_Functions
             List<Article> articles = ParseJSON(json);
             articles = articles.OrderByDescending(article => article.ThreadTimestamp).ToList();
 
+            DateTime today = Utils.GetDay();
+            DateTime yesterday = today.AddDays(-1);
+
             foreach(Article article in articles)
             {
-                Article articleInDatabase = _context.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
+                if (article.ThreadTimestamp.Day == today.Day || article.ThreadTimestamp.Day == yesterday.Day)
+                {
+                    Article articleInDatabase = _context.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
 
-                if(articleInDatabase == null)
-                {
-                    _context.Article.Add(article);
-                }
-                else
-                {
-                    articleInDatabase.ThreadComments = article.ThreadComments;
+                    if(articleInDatabase == null)
+                    {
+                        _context.Article.Add(article);
+                    }
+                    else
+                    {
+                        articleInDatabase.ThreadComments = article.ThreadComments;
+                    }
                 }
             }
 
@@ -113,7 +119,7 @@ namespace CommentedNews_Functions
                         article.ArticleThumbnail = (string)threadData["thumbnail"];
                         article.ThreadComments = (int)threadData["num_comments"];
                         article.ThreadUrl = String.Format("{0}{1}", "www.reddit.com", threadData["permalink"]);
-                        article.ThreadTimestamp = GetTime((long)threadData["created_utc"], 2);
+                        article.ThreadTimestamp = Utils.GetTime((long)threadData["created_utc"], 2);
 
                         articles.Add(article);
                     }
@@ -135,20 +141,6 @@ namespace CommentedNews_Functions
             }
 
             return false;
-        }
-
-        private DateTime GetTime(long timestamp, double utc)
-        {
-            DateTime time = new DateTime(1970, 1, 1, 0, 0, 0);
-            time = time.AddSeconds(timestamp);
-            time = time.AddHours(utc);
-
-            return time;
-        }
-
-        private int GetDay()
-        {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time")).Day;
         }
     }
 }

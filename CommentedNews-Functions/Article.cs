@@ -29,7 +29,8 @@ namespace CommentedNews_Functions
             ILogger log)
         {
             List<Article> articles = _context.Article.ToList<Article>();
-            return new OkObjectResult("Number of articles: " + articles.Count);
+            string json = JsonConvert.SerializeObject(articles);
+            return new OkObjectResult(json);
         }
     }
 }
