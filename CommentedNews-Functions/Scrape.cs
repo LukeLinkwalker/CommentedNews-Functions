@@ -16,6 +16,7 @@ namespace CommentedNews_Functions
     {
         private readonly string[] medier = new string[] {
             "tv2.dk",
+            "tv2kosmopol.dk",
             "dr.dk",
             "information.dk",
             "altinget.dk",
