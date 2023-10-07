@@ -119,7 +119,7 @@ namespace CommentedNews_Functions
 
                         article.ArticleThumbnail = (string)threadData["thumbnail"];
                         article.ThreadComments = (int)threadData["num_comments"];
-                        article.ThreadUrl = String.Format("{0}{1}", "www.reddit.com", threadData["permalink"]);
+                        article.ThreadUrl = String.Format("{0}{1}", "http://www.reddit.com", threadData["permalink"]);
                         article.ThreadTimestamp = Utils.GetTime((long)threadData["created_utc"], 2);
 
                         articles.Add(article);
