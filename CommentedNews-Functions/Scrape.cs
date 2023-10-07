@@ -43,23 +43,17 @@ namespace CommentedNews_Functions
             List<Article> articles = ParseJSON(json);
             articles = articles.OrderByDescending(article => article.ThreadTimestamp).ToList();
 
-            DateTime today = Utils.GetDay();
-            DateTime yesterday = today.AddDays(-1);
-
             foreach(Article article in articles)
             {
-                if (article.ThreadTimestamp.Day == today.Day || article.ThreadTimestamp.Day == yesterday.Day)
+                Article articleInDatabase = _context.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
+                
+                if(articleInDatabase == null)
                 {
-                    Article articleInDatabase = _context.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
-
-                    if(articleInDatabase == null)
-                    {
-                        _context.Article.Add(article);
-                    }
-                    else
-                    {
-                        articleInDatabase.ThreadComments = article.ThreadComments;
-                    }
+                    _context.Article.Add(article);
+                }
+                else
+                {
+                    articleInDatabase.ThreadComments = article.ThreadComments;
                 }
             }
 

@@ -24,11 +24,10 @@ namespace CommentedNews_Functions
             List<Article> articles = _context.Article.ToList<Article>();
         
             DateTime today = Utils.GetDay();
-            DateTime yesterday = today.AddDays(-1);
         
             foreach (Article article in articles)
             {
-                if(article.ThreadTimestamp.Day != today.Day && article.ThreadTimestamp.Day != yesterday.Day)
+                if(today.Subtract(article.ThreadTimestamp).Days > 7)
                 {
                     _context.Remove<Article>(article);
                 }
