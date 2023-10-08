@@ -1,22 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommentedNews_Functions
+namespace CommentedNews_Functions.Entities
 {
-    public class ArticleContext : DbContext
-    {
-        public ArticleContext(DbContextOptions<ArticleContext> options) : base(options)
-        {
-
-        }
-
-        public DbSet<Article> Article { get; set; }
-    }
-
     public class Article
     {
         public int Id { get; set; }

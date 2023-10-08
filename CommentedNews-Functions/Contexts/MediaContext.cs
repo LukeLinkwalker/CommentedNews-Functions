@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommentedNews_Functions.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,5 @@ namespace CommentedNews_Functions
         public DbSet<Media> Media { get; set; }
     }
 
-    public class Media
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
+    
 }

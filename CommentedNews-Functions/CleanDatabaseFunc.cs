@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommentedNews_Functions.Entities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 
 namespace CommentedNews_Functions
 {
-    public class CleanDB
+    public class CleanDatabaseFunc
     {
         private readonly ArticleContext _context;
 
-        public CleanDB(ArticleContext context)
+        public CleanDatabaseFunc(ArticleContext context)
         {
             _context = context;
         }

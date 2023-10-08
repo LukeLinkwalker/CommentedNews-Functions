@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CommentedNews_Functions.Entities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
@@ -12,13 +13,13 @@ using Newtonsoft.Json.Linq;
 
 namespace CommentedNews_Functions
 {
-    public class Scrape
+    public class ScrapeFunc
     {
         private readonly ArticleContext _articleContext;
         private readonly MediaContext _mediaContext;
         private List<string> medier {  get; set; }
 
-        public Scrape(ArticleContext articleContext, MediaContext mediaContext)
+        public ScrapeFunc(ArticleContext articleContext, MediaContext mediaContext)
         {
             _articleContext = articleContext;
             _mediaContext = mediaContext;
@@ -39,7 +40,6 @@ namespace CommentedNews_Functions
             foreach(Article article in articles)
             {
                 Article articleInDatabase = _articleContext.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
-                
                 if(articleInDatabase == null)
                 {
                     _articleContext.Article.Add(article);
@@ -53,6 +53,9 @@ namespace CommentedNews_Functions
             _articleContext.SaveChanges();
         }
 
+        /// <summary>
+        /// Fetches new posts made on the /r/Denmark subreddit through the Reddit API.
+        /// </summary>
         private async Task<string> GetJSON(ILogger log)
         {
             HttpClient client = new HttpClient();
@@ -75,6 +78,9 @@ namespace CommentedNews_Functions
             return string.Empty;
         }
 
+        /// <summary>
+        /// Parses all threads in the JSON input and extracts the information required for an Article object when a thread contains a news article.
+        /// </summary>
         private List<Article> ParseJSON(string json)
         {
             List<Article> articles = new List<Article>();

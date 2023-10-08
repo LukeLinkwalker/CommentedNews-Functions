@@ -11,14 +11,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using CommentedNews_Functions.Entities;
 
 namespace CommentedNews_Functions
 {
-    public class Articles
+    public class ArticlesFunc
     {
         private readonly ArticleContext _context;
 
-        public Articles(ArticleContext context)
+        public ArticlesFunc(ArticleContext context)
         {
             _context = context;
         }

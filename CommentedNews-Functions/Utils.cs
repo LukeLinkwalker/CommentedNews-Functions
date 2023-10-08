@@ -8,6 +8,9 @@ namespace CommentedNews_Functions
 {
     public static class Utils
     {
+        /// <summary>
+        /// Returns a DateTime instance based on a UNIX timestamp whilst also setting appropriate UTC timezone.
+        /// </summary>
         public static DateTime GetTime(long timestamp, double utc)
         {
             DateTime time = new DateTime(1970, 1, 1, 0, 0, 0);
@@ -17,6 +20,9 @@ namespace CommentedNews_Functions
             return time;
         }
 
+        /// <summary>
+        /// Returns a DateTime instance that tells the current time and date in Denmark.
+        /// </summary>
         public static DateTime GetDay()
         {
             return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"));
