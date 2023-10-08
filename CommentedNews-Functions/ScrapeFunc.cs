@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Net.Http;
@@ -9,6 +10,7 @@ using CommentedNews_Functions.Entities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CommentedNews_Functions
@@ -89,31 +91,30 @@ namespace CommentedNews_Functions
             var dataObj = jsonData["data"];
             JArray threads = (JArray)dataObj["children"];
 
-            foreach (JToken thread in threads)
-            {
-                if ((string)thread["kind"] == "t3")
-                {
-                    JToken threadData = thread["data"];
-                    string domain = (string)threadData["domain"];
+            Thread[] t = JsonConvert.DeserializeObject<Thread[]>(threads.ToString());
 
-                    if (IsDomainNews(domain) == true)
+            foreach(Thread thread in t)
+            {
+                if (thread.kind == "t3")
+                {
+                    if(IsDomainNews(thread.data.domain) == true)
                     {
                         Article article = new Article();
-                        article.ArticleTitle = (string)threadData["title"];
+                        article.ArticleTitle = thread.data.title;
 
-                        if (threadData["url_overridden_by_dest"] != null)
+                        if(thread.data.url_overridden_by_dest != string.Empty)
                         {
-                            article.ArticleUrl = (string)threadData["url_overridden_by_dest"];
+                            article.ArticleUrl = thread.data.url_overridden_by_dest;
                         }
                         else
                         {
-                            article.ArticleUrl = (string)threadData["url"];
+                            article.ArticleUrl = thread.data.url;
                         }
 
-                        article.ArticleThumbnail = (string)threadData["thumbnail"];
-                        article.ThreadComments = (int)threadData["num_comments"];
-                        article.ThreadUrl = String.Format("{0}{1}", "http://www.reddit.com", threadData["permalink"]);
-                        article.ThreadTimestamp = Utils.GetTime((long)threadData["created_utc"], 2);
+                        article.ArticleThumbnail = thread.data.thumbnail;
+                        article.ThreadComments = thread.data.num_comments;
+                        article.ThreadUrl = thread.data.permalink;
+                        article.ThreadTimestamp = Utils.GetTime(thread.data.created_utc, 2);
 
                         articles.Add(article);
                     }
