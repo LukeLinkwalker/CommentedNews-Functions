@@ -48,7 +48,7 @@ namespace CommentedNews_Functions
                 }
                 else
                 {
-                    articleInDatabase.ThreadComments = article.ThreadComments;
+                    articleInDatabase = article;
                 }
             }
 
@@ -89,11 +89,12 @@ namespace CommentedNews_Functions
 
             var jsonData = JObject.Parse(json);
             var dataObj = jsonData["data"];
-            JArray threads = (JArray)dataObj["children"];
 
-            Thread[] t = JsonConvert.DeserializeObject<Thread[]>(threads.ToString());
+            Thread[] threads = JsonConvert.DeserializeObject<Thread[]>(
+                ((JArray)dataObj["children"]).ToString()
+                );
 
-            foreach(Thread thread in t)
+            foreach(Thread thread in threads)
             {
                 if (thread.kind == "t3")
                 {
@@ -113,7 +114,7 @@ namespace CommentedNews_Functions
 
                         article.ArticleThumbnail = thread.data.thumbnail;
                         article.ThreadComments = thread.data.num_comments;
-                        article.ThreadUrl = thread.data.permalink;
+                        article.ThreadUrl = $"https://www.reddit.com{thread.data.permalink}";
                         article.ThreadTimestamp = Utils.GetTime(thread.data.created_utc, 2);
 
                         articles.Add(article);
