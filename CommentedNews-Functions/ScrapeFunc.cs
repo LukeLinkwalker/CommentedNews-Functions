@@ -48,7 +48,7 @@ namespace CommentedNews_Functions
                 }
                 else
                 {
-                    articleInDatabase = article;
+                    articleInDatabase.ThreadComments = article.ThreadComments;
                 }
             }
 
