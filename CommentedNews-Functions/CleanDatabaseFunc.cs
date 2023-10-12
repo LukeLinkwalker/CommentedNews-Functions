@@ -18,7 +18,7 @@ namespace CommentedNews_Functions
         }
 
         [FunctionName("CleanDB")] 
-        public void Run([TimerTrigger("0 0 0 * * *")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("0 1 0 * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Cleaning db at: {DateTime.Now}");
         
