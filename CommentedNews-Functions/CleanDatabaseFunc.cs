@@ -17,7 +17,7 @@ namespace CommentedNews_Functions
             _context = context;
         }
 
-        [FunctionName("CleanDB")]
+        [FunctionName("CleanDB")] 
         public void Run([TimerTrigger("0 0 0 * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Cleaning db at: {DateTime.Now}");
@@ -28,7 +28,7 @@ namespace CommentedNews_Functions
         
             foreach (Article article in articles)
             {
-                if(today.Subtract(article.ThreadTimestamp).Days > 7)
+                if(today.Subtract(article.ThreadTimestamp).Days >= 7)
                 {
                     _context.Remove<Article>(article);
                 }
