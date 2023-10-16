@@ -9,8 +9,5 @@ This project contains functions that are used to facilitate gathering and servin
 
 These functions are also automatically deployed to the Azure Cloud.
 
-Further work I am considering:
-- [ ] Adding IaC w/ Bicep.
-
 Demonstration of result in the UI:
-![til](https://i.imgur.com/AKaB7wW.jpg)
+![til](https://i.imgur.com/omVHDO3.jpg)
