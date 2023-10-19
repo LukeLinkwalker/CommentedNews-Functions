@@ -24,14 +24,23 @@ namespace CommentedNews_Functions
             _context = context;
         }
 
-        [FunctionName("GetArticles")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
+        [FunctionName("articles_all")]
+        public async Task<IActionResult> AllArticles(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "articles")] HttpRequest req,
             ILogger log)
         {
             List<Article> articles = _context.Article.ToList<Article>();
             string json = JsonConvert.SerializeObject(articles);
             return new OkObjectResult(json);
+        }
+
+        [FunctionName("articles_day")]
+        public async Task<IActionResult> ArticlesFromDay(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "articles/{day:int}")] HttpRequest req,
+            ILogger log,
+            int day)
+        {
+            return new OkObjectResult(day);
         }
     }
 }
