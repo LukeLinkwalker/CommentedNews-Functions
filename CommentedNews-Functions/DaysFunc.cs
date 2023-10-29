@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using CommentedNews_Functions.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.JsonPatch.Internal;
 
 namespace CommentedNews_Functions
 {
@@ -23,18 +24,19 @@ namespace CommentedNews_Functions
         }
 
         [FunctionName("days")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
-            ILogger log)
+        public async Task<IActionResult> SevenDays(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "days/{maxDays:int}")] HttpRequest req,
+            ILogger log,
+            int maxDays)
         {
-            List<Article> articles = _context.Article.ToList<Article>(); 
+            List<Article> articles = _context.Article.ToList<Article>();
             List<DateTime> days = new List<DateTime>();
-
-            if(articles.Count > 0) 
-            { 
+            
+            if (articles.Count > 0)
+            {
                 articles = articles.OrderByDescending(article => article.ThreadTimestamp).ToList();
                 articles = articles.DistinctBy(article => article.ThreadTimestamp.Day).ToList();
-                articles = articles.Take(7).ToList();
+                articles = articles.Take(maxDays).ToList();
                 days = articles.Select(article => article.ThreadTimestamp).ToList();
             }
 
