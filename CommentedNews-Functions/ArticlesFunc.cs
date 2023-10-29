@@ -40,7 +40,9 @@ namespace CommentedNews_Functions
             ILogger log,
             int day)
         {
-            return new OkObjectResult(day);
+            List<Article> articles = _context.Article.Where(article => article.ThreadTimestamp.Day == day).ToList();
+            string json = JsonConvert.SerializeObject(articles);
+            return new OkObjectResult(json);
         }
     }
 }
