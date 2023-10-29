@@ -28,14 +28,14 @@ namespace CommentedNews_Functions
             ILogger log)
         {
             List<Article> articles = _context.Article.ToList<Article>(); 
-            List<int> days = new List<int>();
+            List<DateTime> days = new List<DateTime>();
 
             if(articles.Count > 0) 
             { 
                 articles = articles.OrderByDescending(article => article.ThreadTimestamp).ToList();
                 articles = articles.DistinctBy(article => article.ThreadTimestamp.Day).ToList();
                 articles = articles.Take(7).ToList();
-                days = articles.Select(article => article.ThreadTimestamp.Day).ToList();
+                days = articles.Select(article => article.ThreadTimestamp).ToList();
             }
 
             string json = JsonConvert.SerializeObject(days);
