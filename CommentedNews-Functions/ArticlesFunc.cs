@@ -24,7 +24,7 @@ namespace CommentedNews_Functions
             _context = context;
         }
 
-        [FunctionName("articles_all")]
+        [FunctionName("Articles_all")]
         public async Task<IActionResult> AllArticles(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "articles")] HttpRequest req,
             ILogger log)
@@ -34,7 +34,7 @@ namespace CommentedNews_Functions
             return new OkObjectResult(json);
         }
 
-        [FunctionName("articles_day")]
+        [FunctionName("Articles_day")]
         public async Task<IActionResult> ArticlesFromDay(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "articles/{day:int}")] HttpRequest req,
             ILogger log,

@@ -33,11 +33,13 @@ namespace CommentedNews_Functions
         [FunctionName("Fetch")]
         public async Task Run([TimerTrigger("0 0/15 * * * *")]TimerInfo myTimer, ILogger log)
         {
-            log.LogInformation($"Scraping at: {DateTime.Now}");
-
+            log.LogInformation($"Fetching at: {DateTime.Now}");
             try
             {
                 string json = await GetJSON(log);
+                
+                log.LogInformation($"Processing JSON: {json}");
+
                 List<Article> articles = ParseJSON(json);
                 articles = articles.OrderByDescending(article => article.ThreadTimestamp).ToList();
 
@@ -54,7 +56,7 @@ namespace CommentedNews_Functions
                     }
                 }
 
-                _articleContext.SaveChanges();
+                //_articleContext.SaveChanges();
             } catch (Exception ex)
             {
                 log.LogInformation($"Error occured at: {DateTime.Now}");

@@ -23,7 +23,7 @@ namespace CommentedNews_Functions
             _context = context;
         }
 
-        [FunctionName("days")]
+        [FunctionName("Days")]
         public async Task<IActionResult> AnyDays(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "days/{maxDays:int}")] HttpRequest req,
             ILogger log,
