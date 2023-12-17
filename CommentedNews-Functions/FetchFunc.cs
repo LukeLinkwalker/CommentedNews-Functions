@@ -31,14 +31,14 @@ namespace CommentedNews_Functions
         }
 
         [FunctionName("Fetch")]
-        public async Task Run([TimerTrigger("0 0/15 * * * *")]TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("0 0 0/2 * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Fetching at: {DateTime.Now}");
             try
             {
                 string json = await GetJSON(log);
                 
-                log.LogInformation($"Processing JSON: {json}");
+                log.LogInformation($"Processing JSON input of length: {json.Length}");
 
                 List<Article> articles = ParseJSON(json);
                 articles = articles.OrderByDescending(article => article.ThreadTimestamp).ToList();
@@ -56,7 +56,7 @@ namespace CommentedNews_Functions
                     }
                 }
 
-                //_articleContext.SaveChanges();
+                _articleContext.SaveChanges();
             } catch (Exception ex)
             {
                 log.LogInformation($"Error occured at: {DateTime.Now}");
@@ -76,7 +76,7 @@ namespace CommentedNews_Functions
                 client.DefaultRequestHeaders.Accept.Add(
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
                 );
-                client.DefaultRequestHeaders.Add("User-Agent", "News_Threads_Scraper");
+                client.DefaultRequestHeaders.Add("User-Agent", "News_Threads_Ranking");
 
                 HttpResponseMessage response = client.GetAsync(".json?limit=100").Result;
                 if (response.IsSuccessStatusCode)
