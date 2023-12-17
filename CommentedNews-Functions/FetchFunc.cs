@@ -85,7 +85,7 @@ namespace CommentedNews_Functions
                 }
                 else
                 {
-                    log.LogInformation("Http request to reddit API not answered with 200 response.");
+                    log.LogInformation($"Http request to reddit API failed. Response code: {response.StatusCode}");
                 }
             } 
             catch (Exception ex)
