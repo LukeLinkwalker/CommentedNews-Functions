@@ -22,19 +22,26 @@ namespace CommentedNews_Functions
         {
             log.LogInformation($"Cleaning db at: {DateTime.Now}");
         
-            List<Article> articles = _context.Article.ToList<Article>();
-        
-            DateTime today = Utils.GetDay();
-        
-            foreach (Article article in articles)
+            try
             {
-                if(today.Subtract(article.ThreadTimestamp).Days >= 7)
-                {
-                    _context.Remove<Article>(article);
-                }
-            }
+                List<Article> articles = _context.Article.ToList<Article>();
         
-            _context.SaveChanges();
+                DateTime today = Utils.GetDay();
+        
+                foreach (Article article in articles)
+                {
+                    if(today.Subtract(article.ThreadTimestamp).Days >= 7)
+                    {
+                        _context.Remove<Article>(article);
+                    }
+                }
+        
+                _context.SaveChanges();
+            } catch (Exception ex)
+            {
+                log.LogInformation($"Cleaning db failed at: {DateTime.Now}");
+                log.LogInformation(ex.ToString());
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace CommentedNews_Functions
         }
 
         [FunctionName("days")]
-        public async Task<IActionResult> SevenDays(
+        public async Task<IActionResult> AnyDays(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "days/{maxDays:int}")] HttpRequest req,
             ILogger log,
             int maxDays)

@@ -15,13 +15,13 @@ using Newtonsoft.Json.Linq;
 
 namespace CommentedNews_Functions
 {
-    public class ScrapeFunc
+    public class FetchFunc
     {
         private readonly ArticleContext _articleContext;
         private readonly MediaContext _mediaContext;
         private List<string> medier {  get; set; }
 
-        public ScrapeFunc(ArticleContext articleContext, MediaContext mediaContext)
+        public FetchFunc(ArticleContext articleContext, MediaContext mediaContext)
         {
             _articleContext = articleContext;
             _mediaContext = mediaContext;
@@ -30,29 +30,36 @@ namespace CommentedNews_Functions
             medier = media.Select(m => m.Name).ToList();
         }
 
-        [FunctionName("Scrape")]
+        [FunctionName("Fetch")]
         public async Task Run([TimerTrigger("0 0/15 * * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Scraping at: {DateTime.Now}");
 
-            string json = await GetJSON(log);
-            List<Article> articles = ParseJSON(json);
-            articles = articles.OrderByDescending(article => article.ThreadTimestamp).ToList();
-
-            foreach(Article article in articles)
+            try
             {
-                Article articleInDatabase = _articleContext.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
-                if(articleInDatabase == null)
-                {
-                    _articleContext.Article.Add(article);
-                }
-                else
-                {
-                    articleInDatabase.ThreadComments = article.ThreadComments;
-                }
-            }
+                string json = await GetJSON(log);
+                List<Article> articles = ParseJSON(json);
+                articles = articles.OrderByDescending(article => article.ThreadTimestamp).ToList();
 
-            _articleContext.SaveChanges();
+                foreach(Article article in articles)
+                {
+                    Article articleInDatabase = _articleContext.Article.SingleOrDefault<Article>(a => a.ArticleUrl == article.ArticleUrl);
+                    if(articleInDatabase == null)
+                    {
+                        _articleContext.Article.Add(article);
+                    }
+                    else
+                    {
+                        articleInDatabase.ThreadComments = article.ThreadComments;
+                    }
+                }
+
+                _articleContext.SaveChanges();
+            } catch (Exception ex)
+            {
+                log.LogInformation($"Error occured at: {DateTime.Now}");
+                log.LogInformation(ex.ToString());
+            }
         }
 
         /// <summary>
