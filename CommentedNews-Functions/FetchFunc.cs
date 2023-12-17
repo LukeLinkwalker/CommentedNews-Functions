@@ -69,21 +69,29 @@ namespace CommentedNews_Functions
         /// </summary>
         private async Task<string> GetJSON(ILogger log)
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://www.reddit.com/r/denmark/new");
-            client.DefaultRequestHeaders.Accept.Add(
-                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
-            );
-            client.DefaultRequestHeaders.Add("User-Agent", "News_Threads_Scraper");
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri("http://www.reddit.com/r/denmark/new");
+                client.DefaultRequestHeaders.Accept.Add(
+                    new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
+                );
+                client.DefaultRequestHeaders.Add("User-Agent", "News_Threads_Scraper");
 
-            HttpResponseMessage response = client.GetAsync(".json?limit=100").Result;
-            if (response.IsSuccessStatusCode)
+                HttpResponseMessage response = client.GetAsync(".json?limit=100").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    log.LogInformation("Http request to reddit API not answered with 200 response.");
+                }
+            } 
+            catch (Exception ex)
             {
-                return response.Content.ReadAsStringAsync().Result;
-            }
-            else
-            {
-                log.LogInformation("Http request to reddit API failed.");
+                log.LogInformation($"Error occured while getting data from Reddit at: {DateTime.Now}");
+                log.LogInformation(ex.ToString());
             }
 
             return string.Empty;
