@@ -24,7 +24,7 @@ namespace CommentedNews_Functions
 
         [FunctionName("Article_Create")]
         public async Task<IActionResult> ArticleCreate(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "article")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "article")] HttpRequest req,
             ILogger log)
         {
             var headerList = req.Headers.ToList();
@@ -58,7 +58,7 @@ namespace CommentedNews_Functions
 
         [FunctionName("Article_Read")]
         public async Task<IActionResult> ArticleRead(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "article/{id:int}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "article/{id:int}")] HttpRequest req,
             ILogger log, int id)
         {
             Article article = _context.Article.Where(article => article.Id == id).SingleOrDefault();
@@ -76,7 +76,7 @@ namespace CommentedNews_Functions
 
         [FunctionName("Article_Update")]
         public async Task<IActionResult> ArticleUpdate(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "article/{id:int}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "article/{id:int}")] HttpRequest req,
             ILogger log, int id)
         {
             var headerList = req.Headers.ToList();
@@ -111,7 +111,7 @@ namespace CommentedNews_Functions
 
         [FunctionName("Article_Delete")]
         public async Task<IActionResult> ArticleDelete(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "article/{id:int}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "article/{id:int}")] HttpRequest req,
             ILogger log, int id)
         {
             Article article = _context.Article.Where(article => article.Id == id).SingleOrDefault();
