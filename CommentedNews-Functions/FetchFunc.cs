@@ -107,9 +107,7 @@ namespace CommentedNews_Functions
             var jsonData = JObject.Parse(json);
             var dataObj = jsonData["data"];
 
-            Thread[] threads = JsonConvert.DeserializeObject<Thread[]>(
-                ((JArray)dataObj["children"]).ToString()
-                );
+            Thread[] threads = JsonConvert.DeserializeObject<Thread[]>(((JArray)dataObj["children"]).ToString());
 
             foreach(Thread thread in threads)
             {
